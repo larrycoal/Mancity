@@ -37,7 +37,6 @@ const Block = () => {
      return
       } 
   };
-  console.log(blocks.matches)
 
   return (
   <div className="home_matches">
