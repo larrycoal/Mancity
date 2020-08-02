@@ -12,11 +12,7 @@ const MatchesHome = () => {
                 >
                     Matches
                 </Tag>
-               
                <Block/>
-               
-                
-
                 <Tag
                 background="#ffffff"
                 color="#0e1731"
@@ -26,7 +22,6 @@ const MatchesHome = () => {
                 >
                     see more matches
                 </Tag>
-
             </div>
         </div>
     );

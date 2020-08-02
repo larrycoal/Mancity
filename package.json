@@ -10,6 +10,7 @@
     "@testing-library/user-event": "^7.2.1",
     "d3-ease": "^1.0.6",
     "firebase": "^7.17.1",
+    "gsap": "^3.4.2",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-move": "^6.4.0",
