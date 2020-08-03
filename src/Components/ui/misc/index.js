@@ -37,3 +37,14 @@ export const firbaseLooper =(snapshot)=>{
        return data
 }
 
+export const validate = (element)=>{
+     let error = [true,'']
+
+     if(element.validation.required){
+         let valid = element.value.trim() !== ""
+         let message = !valid? "This field is required":""
+         error=!valid?[valid,message]: error
+     }
+     return error
+}
+
