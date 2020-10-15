@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import FormFields from "../../ui/misc/FormFields";
 import { Fade } from "react-reveal";
-import {validate} from '../../ui/misc'
+import { validate } from "../../ui/misc";
 
 class Enroll extends Component {
   state = {
@@ -27,22 +27,36 @@ class Enroll extends Component {
   };
   formSubmit(e) {
     e.preventDefault();
-    console.log("submit");
-  }
-  onFormChange(element){
-     
-      let newFormData={...this.state.formData}
-      let newInput = {...newFormData[element.id]}
-      newInput.value=element.e.target.value
+    
+    let dataToSubmit = {}
+    let formValid = true
 
-      let validData=validate(newInput)
-      newInput.valid=validData[0]
-      newInput.validationMessage=validData[1]
-      newFormData[element.id]={...newInput}
-      console.log(newFormData)
-      this.setState({
-          formData:newFormData
-      })
+    for (let key in this.state.formData){
+      dataToSubmit[key]=this.state.formData[key].value
+      formValid = this.state.formData[key].valid && formValid
+    }
+    if(formValid){
+      console.log(dataToSubmit)
+    }else{
+        this.setState({
+          formError:true
+        })
+    }
+  }
+  onFormChange(element) {
+    let newFormData = { ...this.state.formData };
+    let newInput = { ...newFormData[element.id] };
+    newInput.value = element.e.target.value;
+
+    let validData = validate(newInput);
+    newInput.valid = validData[0];
+    newInput.validationMessage = validData[1];
+    newFormData[element.id] = { ...newInput };
+    console.log(newFormData);
+    this.setState({
+      formError:false,
+      formData: newFormData,
+    });
   }
 
   render() {
@@ -50,17 +64,17 @@ class Enroll extends Component {
       <Fade>
         <div className="enroll_wrapper">
           <div className="enroll_title">Enter Your Email</div>
-          <form
-            onSubmit={(e) => {
-              this.formSubmit(e);
-            }}
-          >
+          <form>
             <div className="enroll_input">
               <FormFields
                 formData={this.state.formData.email}
-                id='email'
-                change={(element)=>this.onFormChange(element)}
+                id="email"
+                change={(element) => this.onFormChange(element)}
               />
+              {this.state.formError ? <div className="error_label">
+                 something went Wrong
+              </div>:null}
+              <button onClick={(event)=>this.formSubmit(event)}>Enroll</button>
             </div>
           </form>
         </div>

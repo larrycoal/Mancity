@@ -39,7 +39,11 @@ export const firbaseLooper =(snapshot)=>{
 
 export const validate = (element)=>{
      let error = [true,'']
-
+     if(element.validation.email){
+         const valid =/\S+@\S+\.\S+/.test(element.value)
+         let message = !valid? "Must be an Email":""
+         error=!valid?[valid,message]: error
+     }
      if(element.validation.required){
          let valid = element.value.trim() !== ""
          let message = !valid? "This field is required":""
