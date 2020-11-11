@@ -1,5 +1,5 @@
 import React from "react";
-import jersey from "../../../Resources/images/jersey.jpg";
+import jersey from "../../../Resources/images/chelseaKit.png";
 import { Zoom } from "react-reveal";
 
 const animation = () => {

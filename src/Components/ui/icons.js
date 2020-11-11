@@ -1,5 +1,5 @@
 import React from 'react';
-import chelseaLogo from '../../Resources/images/logos/manchester_city_logo.png'
+import chelseaLogo from '../../Resources/images/logos/chelsea_fc_logo.png'
 import {Link} from 'react-router-dom'
 
 export const Logo = (props) => {

@@ -2,7 +2,10 @@ import React, { useState } from "react";
 import { Animate } from "react-move";
 import {easePolyOut} from "d3-ease"
 import PlayerCard from "../../ui/misc/PlayerCard"
-import Otamendi from "../../../Resources/images/players/Otamendi.png"
+import hakim from "../../../Resources/images/Hakim.png"
+import Pulisic from "../../../Resources/images/pulisic.png"
+import havertz from "../../../Resources/images/havertz.png"
+import timo from "../../../Resources/images/timo.png"
 
 const Cards = (props) => {
   let { show } = props;
@@ -11,22 +14,26 @@ const Cards = (props) => {
     {
       left: "300px",
       bottom: "90px",
-      delay:300
+      delay:300,
+      bck:`${Pulisic}`
     },
     {
       bottom: "60px",
       left: "200px",
       delay:200,
+      bck:`${havertz}`
     },
     {
       bottom: "30px",
       left: "100px",
       delay:100,
+      bck:`${timo}`
     },
     {
       bottom: "0px",
       left: "0px",
-      delay:0
+      delay:0,
+      bck:`${hakim}`
     },
   ]);
  
@@ -46,10 +53,11 @@ const Cards = (props) => {
           left:card.left,
           bottom:card.bottom,
           opacity:1,
+          bck:card.bck,
           timing:{delay:card.delay,duration:200,ease:easePolyOut}
         }}
         >
-          {({left,bottom,opacity}) => {
+          {({left,bottom,opacity,bck}) => {
             return (
             <div
             style={{
@@ -60,10 +68,10 @@ const Cards = (props) => {
             }}
             >
               <PlayerCard
-              bck={Otamendi}
-              number="30"
-              name="Otamendi"
-              lastname="micheal"
+              bck={bck}
+              number="22"
+              name="Hakim"
+              lastname="ziyech"
               />
             </div>
             )}}

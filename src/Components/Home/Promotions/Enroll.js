@@ -90,7 +90,6 @@ class Enroll extends Component {
     newInput.valid = validData[0];
     newInput.validationMessage = validData[1];
     newFormData[element.id] = { ...newInput };
-    console.log(newFormData);
     this.setState({
       formError: false,
       formData: newFormData,

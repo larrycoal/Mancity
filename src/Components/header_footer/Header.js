@@ -8,7 +8,7 @@ const Header = () => {
       <AppBar
         style={{
           position: "fixed",
-          backgroundColor: "#98c5e9",
+          backgroundColor: "#034694",
           boxShadow: "none",
           padding: "5px 0",
           borderBottom: "2px solid #00285e",
