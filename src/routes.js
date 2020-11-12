@@ -1,6 +1,11 @@
 import React from "react";
 import Layout from "./Components/Layout/HOC";
-import { Switch, Route } from "react-router-dom";
+import { Switch } from "react-router-dom";
+
+
+import PrivateRoute from './Components/authRoutes/privateRoute'
+import PublicRoute from './Components/authRoutes/publicRoutes'
+
 import Home from "./Components/Home";
 import SignIn from "./Components/SignIn";
 import Dashboard from './Components/Admin/Dashboard'
@@ -9,9 +14,9 @@ function App(props) {
   return (
     <Layout>
       <Switch>
-      <Route exact path="/dashboard" component={Dashboard} />
-        <Route exact path="/sign_in" component={SignIn} />
-        <Route exact path="/" component={Home} />
+        <PrivateRoute {...props} exact path="/dashboard" Component={Dashboard} />
+        <PublicRoute restricted={true} {...props} exact path="/sign_in" Component={SignIn}/>
+        <PublicRoute restricted={false} {...props} exact path="/" Component={Home}/>
       </Switch>
     </Layout>
   );
