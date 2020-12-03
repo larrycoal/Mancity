@@ -1,10 +1,13 @@
 import React, { Component } from "react";
 import AdminHoc from "../../Layout/AdminHoc";
 import FormFields from "../../ui/misc/FormFields";
+import { validate } from "../../ui/misc";
+import { firebaseDb, firebaseTeams } from "../../../firebase";
+import { firbaseLooper } from "../../ui/misc";
 class AddEditMatches extends Component {
   state = {
     matchId: "",
-    formType: "Edit Form",
+    formType: "",
     formError: false,
     formSuccess: "",
     formData: {
@@ -157,10 +160,74 @@ class AddEditMatches extends Component {
       },
     },
   };
+  onFormChange(element) {
+    console.log(element);
+    let newFormData = { ...this.state.formData };
+    let newInput = { ...newFormData[element.id] };
+    newInput.value = element.e.target.value;
 
-  submitForm(e){
-      e.preventDefault()
-      console.log(e.target)
+    let validData = validate(newInput);
+    newInput.valid = validData[0];
+    newInput.validationMessage = validData[1];
+    newFormData[element.id] = { ...newInput };
+    this.setState({
+      formError: false,
+      formData: newFormData,
+    });
+  }
+  submitForm(e) {
+    e.preventDefault();
+    console.log(e.target);
+  }
+
+  updateFields(match, formType, teamOptions, teams,matchId) {
+    const newFormData = {
+      ...this.state.formData,
+    };
+  for(let key in newFormData){
+    if (match) {
+        newFormData[key].value=match[key]
+        newFormData[key].valid=true
+        if(key === 'local' || key === 'away'){
+            newFormData[key].config.options=teamOptions
+        }
+    } else {
+    }
+  }
+  console.log(newFormData)
+  this.setState({
+      matchId,
+      formData:newFormData,
+      formType
+  })
+  }
+  componentDidMount() {
+    var matchId = this.props.match.params.id;
+
+    const getTeams = (match, formType) => {
+      firebaseTeams.once("value").then((snapshot) => {
+        const teams = firbaseLooper(snapshot.val());
+        const teamOptions = [];
+        teams.forEach((team) => {
+          teamOptions.push({
+            key: team.id,
+            value: team.shortName,
+          });
+        });
+        this.updateFields(match, formType, teamOptions, teams,matchId);
+      });
+    };
+
+    if (!matchId) {
+    } else {
+      firebaseDb
+        .ref(`matches/${matchId}`)
+        .once("value")
+        .then((snapshot) => {
+          const match = snapshot.val();
+          getTeams(match, "Edit Match");
+        });
+    }
   }
   render() {
     return (
@@ -215,24 +282,24 @@ class AddEditMatches extends Component {
               <div className="split_fields">
                 <FormFields
                   formData={this.state.formData.referee}
-                  id="Referee"
+                  id="referee"
                   change={(element) => this.onFormChange(element)}
                 />
                 <FormFields
                   formData={this.state.formData.stadium}
-                  id="Stadium"
+                  id="stadium"
                   change={(element) => this.onFormChange(element)}
                 />
               </div>
               <div className="split_fields last">
                 <FormFields
                   formData={this.state.formData.result}
-                  id="Result"
+                  id="result"
                   change={(element) => this.onFormChange(element)}
                 />
                 <FormFields
                   formData={this.state.formData.final}
-                  id="Final"
+                  id="final"
                   change={(element) => this.onFormChange(element)}
                 />
               </div>
@@ -241,7 +308,9 @@ class AddEditMatches extends Component {
                 <div className="error_label">Something Went Wrong</div>
               ) : null}
               <div className="admin_submit">
-                  <button onClick={(e)=>this.submitForm(e)}>{this.state.formType}</button>
+                <button onClick={(e) => this.submitForm(e)}>
+                  {this.state.formType}
+                </button>
               </div>
             </form>
           </div>

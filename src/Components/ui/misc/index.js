@@ -27,7 +27,6 @@ export const Tag = (props) => {
 export const firbaseLooper =(snapshot)=>{
     let id=Object.keys(snapshot)
     let data =[]
-    //console.log(id[0])
         Object.values(snapshot).forEach((childSnapshot,i)=>{
            data.push({
                ...childSnapshot,

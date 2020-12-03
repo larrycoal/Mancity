@@ -44,11 +44,15 @@ const FormFields = ({ formData, id, change }) => {
             </div>
             :null
           }
-         <select>
-           <option>Select below</option>
+         <select 
+         name={formData.config.name}
+         value={formData.value}
+         onChange={(e) => change({ e, id })}
+         >
+           <option value="">Select below</option>
            {
              formData.config.options.map(item=>(
-             <option key={item.key} value={item.key}>{item.value}</option>
+             <option key={item.key} value={item.value}>{item.value}</option>
              ))
            }
          </select>
