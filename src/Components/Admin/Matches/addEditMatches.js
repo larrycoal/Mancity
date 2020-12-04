@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import AdminHoc from "../../Layout/AdminHoc";
 import FormFields from "../../ui/misc/FormFields";
 import { validate } from "../../ui/misc";
-import { firebaseDb, firebaseTeams } from "../../../firebase";
+import { firebaseDb, firebaseMatches, firebaseTeams } from "../../../firebase";
 import { firbaseLooper } from "../../ui/misc";
 class AddEditMatches extends Component {
   state = {
@@ -10,6 +10,7 @@ class AddEditMatches extends Component {
     formType: "",
     formError: false,
     formSuccess: "",
+    teams: [],
     formData: {
       date: {
         element: "input",
@@ -161,7 +162,6 @@ class AddEditMatches extends Component {
     },
   };
   onFormChange(element) {
-    console.log(element);
     let newFormData = { ...this.state.formData };
     let newInput = { ...newFormData[element.id] };
     newInput.value = element.e.target.value;
@@ -175,31 +175,91 @@ class AddEditMatches extends Component {
       formData: newFormData,
     });
   }
+  success(message) {
+    this.setState({
+      formSuccess: message,
+    });
+    setTimeout(() => {
+      this.setState({
+        formSuccess: "",
+      });
+    }, 2000);
+  }
   submitForm(e) {
     e.preventDefault();
-    console.log(e.target);
-  }
 
-  updateFields(match, formType, teamOptions, teams,matchId) {
-    const newFormData = {
-      ...this.state.formData,
-    };
-  for(let key in newFormData){
-    if (match) {
-        newFormData[key].value=match[key]
-        newFormData[key].valid=true
-        if(key === 'local' || key === 'away'){
-            newFormData[key].config.options=teamOptions
-        }
+    let dataToSubmit = {};
+    let formValid = true;
+
+    for (let key in this.state.formData) {
+      dataToSubmit[key] = this.state.formData[key].value;
+      formValid = this.state.formData[key].valid && formValid;
+    }
+    this.state.teams.forEach((team) => {
+      if (team.shortName === dataToSubmit.local) {
+        dataToSubmit.localThmb = team.thmb;
+      }
+      if (team.shortName === dataToSubmit.away) {
+        dataToSubmit.awayThmb = team.thmb;
+      }
+    });
+    if (formValid) {
+      if (this.state.formType === "Edit Match") {
+        firebaseDb
+          .ref(`matches/${this.state.matchId}`)
+          .update(dataToSubmit)
+          .then(() => {
+            this.success("success");
+          })
+          .catch((err) => {
+            console.log("something went wrong");
+          });
+      } else {
+        firebaseMatches
+          .push(dataToSubmit)
+          .then(() => {
+            this.props.history.push("/admin_matches");
+          })
+          .catch(() => {
+            this.setState({
+              formError: true,
+            });
+          });
+      }
     } else {
     }
   }
-  console.log(newFormData)
-  this.setState({
-      matchId,
-      formData:newFormData,
-      formType
-  })
+
+  updateFields(match, formType, teamOptions, teams, matchId) {
+    const newFormData = {
+      ...this.state.formData,
+    };
+    for (let key in newFormData) {
+      if (match) {
+        newFormData[key].value = match[key];
+        newFormData[key].valid = true;
+        if (key === "local" || key === "away") {
+          newFormData[key].config.options = teamOptions;
+        }
+        this.setState({
+          matchId,
+          formData: newFormData,
+          formType,
+          teams,
+        });
+      } else {
+        for (let key in newFormData) {
+          if (key === "local" || key === "away") {
+            newFormData[key].config.options = teamOptions;
+          }
+        }
+        this.setState({
+          formData: newFormData,
+          formType: "Add Match",
+          teams,
+        });
+      }
+    }
   }
   componentDidMount() {
     var matchId = this.props.match.params.id;
@@ -214,11 +274,12 @@ class AddEditMatches extends Component {
             value: team.shortName,
           });
         });
-        this.updateFields(match, formType, teamOptions, teams,matchId);
+        this.updateFields(match, formType, teamOptions, teams, matchId);
       });
     };
 
     if (!matchId) {
+      getTeams();
     } else {
       firebaseDb
         .ref(`matches/${matchId}`)

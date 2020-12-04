@@ -17,6 +17,7 @@ function App(props) {
   return (
     <Layout>
       <Switch>
+      <PrivateRoute {...props} exact path="/admin_matches/add_match" Component={AddEditMatches} />
       <PrivateRoute {...props} exact path="/admin_matches/edit_match/:id" Component={AddEditMatches} />
       <PrivateRoute {...props} exact path="/admin_matches" Component={AdminMatches} />
         <PrivateRoute {...props} exact path="/dashboard" Component={Dashboard} />
