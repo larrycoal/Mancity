@@ -520,6 +520,7 @@ footer .footer_discl {
 
 .the_matches_container {
     margin-top: 96px;
+    min-height: 100vh;
 }
 
 .the_matches_wrapper {
