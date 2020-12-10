@@ -6,15 +6,15 @@ const MatchesList = (props) => {
   const [state, setState] = useState({});
 
   useEffect(() => {
-      console.log(props.matches)
+    console.log(props.matches);
     setState({
-      matches: props.matches
+      matches: props.matches,
     });
-  },[props]);
+  }, [props]);
 
-  const showMatches = () =>{
-  console.log(state.matches)
-  return  state.matches
+  const showMatches = () => {
+    console.log(state.matches);
+    return state.matches
       ? state.matches.map((match, i) => (
           <NodeGroup
             data={state.matches}
@@ -42,33 +42,50 @@ const MatchesList = (props) => {
             {(nodes) => (
               <div>
                 {nodes.map(({ key, data, state: { x, opacity } }) => (
-                  <div key={key} 
-                  className="match_box_big" 
-                  style={{
+                  <div
+                    key={key}
+                    className="match_box_big"
+                    style={{
                       opacity,
-                      transform:`translate(${x}px)`
-                  }}>
-                      <div className="block_wraper">
-                          <div className="block">
-                              <div className="icon" style={{
-                                  background:`url(/images/team_icons/${data.localThmb}.png)`
-                              }}></div>
-                              <div className="team">{data.local}</div>
-                            <div className="result">{data.resultLocal}</div>
-                          </div>
-                          <div className="block">
-                              <div className="icon" style={{
-                                  background:`url(/images/team_icons/${data.awayThmb}.png)`
-                              }}></div>
-                              <div className="team">{data.away}</div>
-                            <div className="result">{data.resultAway}</div>
-                          </div>
+                      transform: `translate(${x}px)`,
+                    }}
+                  >
+                    <div className="block_wraper">
+                      <div className="block">
+                        <div
+                          className="icon"
+                          style={{
+                            background: `url(/images/team_icons/${data.localThmb}.png)`,
+                          }}
+                        ></div>
+                        <div className="team">{data.local}</div>
+                        <div className="result">{data.resultLocal}</div>
                       </div>
-                      <div className="block_wraper nfo">
-                            <div><strong>Date :</strong>{data.date}</div>
-                            <div><strong>Stadium:</strong>{data.stadium}</div>
-                            <div><strong>Referee:</strong>{data.referee}</div>
+                      <div className="block">
+                        <div
+                          className="icon"
+                          style={{
+                            background: `url(/images/team_icons/${data.awayThmb}.png)`,
+                          }}
+                        ></div>
+                        <div className="team">{data.away}</div>
+                        <div className="result">{data.resultAway}</div>
                       </div>
+                    </div>
+                    <div className="block_wraper nfo">
+                      <div>
+                        <strong>Date :</strong>
+                        {data.date}
+                      </div>
+                      <div>
+                        <strong>Stadium:</strong>
+                        {data.stadium}
+                      </div>
+                      <div>
+                        <strong>Referee:</strong>
+                        {data.referee}
+                      </div>
+                    </div>
                   </div>
                 ))}
               </div>
@@ -76,12 +93,8 @@ const MatchesList = (props) => {
           </NodeGroup>
         ))
       : null;
-        }
-  return (
-      <div>
-          {showMatches()}
-      </div>
-  );
+  };
+  return <div>{showMatches()}</div>;
 };
 
 export default MatchesList;
