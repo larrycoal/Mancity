@@ -6,14 +6,12 @@ const MatchesList = (props) => {
   const [state, setState] = useState({});
 
   useEffect(() => {
-    console.log(props.matches);
     setState({
       matches: props.matches,
     });
   }, [props]);
 
   const showMatches = () => {
-    console.log(state.matches);
     return state.matches
       ? state.matches.map((match, i) => (
           <NodeGroup

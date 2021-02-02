@@ -19,16 +19,18 @@ class TheMatches extends Component {
         loading: false,
         matches: matches,
         filterMatches: matches,
+        showFilter:"All"
       });
     });
   }
   filterMatch(played) {
-     const matches = this.state.matches.filter((match)=>{
-        return match.final === played
-    })
+    const matches = this.state.matches.filter((match) => {
+      return match.final === played;
+    });
     this.setState({
-        filterMatches:matches
-    })
+      filterMatches: played === "All" ? this.state.matches : matches,
+      showFilter:played
+    });
   }
   render() {
     return (
@@ -39,13 +41,24 @@ class TheMatches extends Component {
               <div className="match_filters_box">
                 <div className="tag">Show Match</div>
                 <div className="cont">
-                  <div className={`option`}  onClick={()=>this.filterMatch("Yes")}>All</div>
-                  <div className={`option`} onClick={()=>this.filterMatch("Yes")}>
+                  <div
+                    className={`option ${this.state.showFilter === "All" ?"active":""} `}
+                    onClick={() => this.filterMatch("All")}
+                  >
+                    All
+                  </div>
+                  <div
+                    className={`option ${this.state.showFilter === "Yes"? "active":""}`}
+                    onClick={() => this.filterMatch("Yes")}
+                  >
                     Played
                   </div>
-                  <div className={`option`}
-                  onClick={()=>this.filterMatch("No")}
-                  >Not Played</div>
+                  <div
+                    className={`option ${this.state.showFilter === "No"? "active":""}`}
+                    onClick={() => this.filterMatch("No")}
+                  >
+                    Not Played
+                  </div>
                 </div>
               </div>
             </div>
